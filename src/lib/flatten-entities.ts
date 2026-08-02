@@ -40,6 +40,9 @@ export function normalizeCadText(raw: string): string {
     .replace(/\{\\[^;}]*;/g, '')
     .replace(/\}/g, '')
     .replace(/\\[A-Za-z][^;\\]*;?/g, '')
+    // AutoCAD special chars: %%C / %C = diameter Ø (pipe legend labels).
+    .replace(/%%C/gi, 'Ø')
+    .replace(/%C/gi, 'Ø')
     .replace(/[ \t]+\n/g, '\n')
     .replace(/\n[ \t]+/g, '\n')
     .trim()

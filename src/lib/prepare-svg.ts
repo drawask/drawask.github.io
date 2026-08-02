@@ -52,12 +52,14 @@ export function prepareSvgForPreview(
     .replaceAll('stroke="rgb(255,255,255)"', 'stroke="rgb(226,232,240)"')
     .replaceAll('fill="rgb(255,255,255)"', 'fill="rgb(248,250,252)"')
     .replace(/stroke-width="0\.1%"/g, 'stroke-width="0.5%"')
+    // AutoCAD diameter symbol in SVG text (legend: PO-%%C250).
+    .replaceAll('%%C', 'Ø')
 
-  // LibreDWG parent groups set stroke=white; stroked glyphs render as jagged
-  // white "lines" instead of readable text. Force fill-only labels.
+  // LibreDWG often strokes glyphs; kill stroke only. Keep fill so legend
+  // colors (cyan/yellow/blue/red pipe samples) inherit from the parent <g>.
   out = out.replace(
     /<text\b/g,
-    '<text fill="rgb(248,250,252)" stroke="none" stroke-width="0" font-family="Arial, Helvetica, sans-serif"',
+    '<text stroke="none" stroke-width="0" font-family="Arial, Helvetica, sans-serif"',
   )
 
   const world = parseSvgViewBox(out)

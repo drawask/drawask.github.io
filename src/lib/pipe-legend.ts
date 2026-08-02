@@ -1,13 +1,23 @@
-/** Legend colors for HDPE pipe diameters (from drawing legend). */
+/**
+ * Pipe diameter colors from PRINT 250 KHZAN.dwg legend (true RGB):
+ * PO-Ø250 → cyan, PO-Ø400 → yellow, PO-Ø500 → blue, PO-Ø600 → red.
+ */
 const DIAMETER_RGB: Record<string, string> = {
-  '250': 'rgb(34,197,94)', // green
-  '400': 'rgb(234,179,8)', // yellow
-  '500': 'rgb(59,130,246)', // blue
-  '600': 'rgb(239,68,68)', // red
-  // Other sizes seen in network KMZ exports (distinct, not in legend)
+  '250': 'rgb(0,255,255)',
+  '400': 'rgb(255,255,0)',
+  '500': 'rgb(0,0,255)',
+  '600': 'rgb(255,0,0)',
+  // Other sizes seen in network KMZ exports (distinct, not in sheet legend)
   '110': 'rgb(148,163,184)',
   '160': 'rgb(45,212,191)',
   '200': 'rgb(249,115,22)',
+}
+
+const DIAMETER_NAME: Record<string, string> = {
+  '250': 'cyan',
+  '400': 'yellow',
+  '500': 'blue',
+  '600': 'red',
 }
 
 const FALLBACK_RGB = 'rgb(226,232,240)'
@@ -31,10 +41,7 @@ export function pipeColorRgb(diameter: string | null): string {
 }
 
 export function pipeLegendLines(): string[] {
-  return [
-    'PO-Ø250 HDPE → green',
-    'PO-Ø400 HDPE → yellow',
-    'PO-Ø500 HDPE → blue',
-    'PO-Ø600 HDPE → red',
-  ]
+  return Object.entries(DIAMETER_NAME).map(
+    ([mm, name]) => `PO-Ø${mm} HDPE → ${name} (${DIAMETER_RGB[mm]})`,
+  )
 }

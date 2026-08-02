@@ -8,5 +8,7 @@ assert.equal(
 )
 assert.equal(normalizeCadText('{\\C5;}'), '')
 assert.equal(normalizeCadText('0+750'), '0+750')
+assert.equal(normalizeCadText('PO-%%C250'), 'PO-Ø250')
+assert.equal(normalizeCadText('PO-%C400'), 'PO-Ø400')
 
 console.log('flatten-entities.test.ts: ok')

@@ -99,14 +99,20 @@ export function buildAiReport(
   for (const line of geometrySummary) parts.push(`- ${line}`)
   parts.push('')
 
-  const hasPipeLayers = layers.some((l) => /PO-Ø\d+/i.test(l.name))
-  if (hasPipeLayers || result.format === 'kmz' || result.format === 'kml') {
-    parts.push(`## Pipe diameter color legend`)
-    parts.push(`- PO-Ø250 HDPE → green`)
-    parts.push(`- PO-Ø400 HDPE → yellow`)
-    parts.push(`- PO-Ø500 HDPE → blue`)
-    parts.push(`- PO-Ø600 HDPE → red`)
-    parts.push(`- Other diameters use distinct colors; layer names are \`PO-Ø{mm} HDPE\`.`)
+  const hasPipeLegend =
+    layers.some((l) => /PO-Ø\d+|HDPE\s*\d+/i.test(l.name)) ||
+    scopedRows.some((r) => /PO-Ø\d+/i.test(r.text)) ||
+    result.format === 'kmz' ||
+    result.format === 'kml'
+  if (hasPipeLegend) {
+    parts.push(`## Pipe diameter color legend (from drawing)`)
+    parts.push(`- PO-Ø250 HDPE → cyan rgb(0,255,255)`)
+    parts.push(`- PO-Ø400 HDPE → yellow rgb(255,255,0)`)
+    parts.push(`- PO-Ø500 HDPE → blue rgb(0,0,255)`)
+    parts.push(`- PO-Ø600 HDPE → red rgb(255,0,0)`)
+    parts.push(
+      `- Use line/text color to identify diameter. Ø is AutoCAD %%C. KMZ layers are named \`PO-Ø{mm} HDPE\`.`,
+    )
     parts.push('')
   }
 

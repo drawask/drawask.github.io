@@ -69,11 +69,18 @@ export default function App() {
           <span className="brand-mark" aria-hidden="true" />
           CadChat
         </div>
-        <h1>See the drawing. Chat about it with AI.</h1>
+        <h1>Free online DWG viewer. Open drawings, export CSV, chat with AI.</h1>
         <p>
-          Upload DWG or DXF, explore layers in the playground, then copy a clean pack for
-          ChatGPT, Claude, or any other model — takeoffs, cost checks, design QA, and more.
+          Open AutoCAD <strong>DWG</strong> or <strong>DXF</strong> in your browser, explore
+          layers, extract elevation and index tables to CSV, then copy a clean pack for
+          ChatGPT, Claude, or Cursor. Parsing stays on your device.
         </p>
+        <ul className="seo-pills" aria-label="Popular uses">
+          <li>DWG to CSV</li>
+          <li>Open DWG online</li>
+          <li>DWG to ChatGPT</li>
+          <li>Extract table from DWG</li>
+        </ul>
       </header>
 
       <div
@@ -116,7 +123,7 @@ export default function App() {
           {busy ? 'Parsing…' : 'Browse files'}
         </button>
         <h2>{busy ? 'Parsing drawing…' : 'Drop a .dwg or .dxf file here'}</h2>
-        <p>Parsing runs locally in your browser. One file powers both View and Export.</p>
+        <p>Free DWG viewer online. One file powers View and Ask AI. Nothing is uploaded to a server.</p>
       </div>
 
       {error ? <p className="status error">{error}</p> : null}
@@ -261,6 +268,57 @@ export default function App() {
           ) : null}
         </>
       ) : null}
+
+      <section className="faq panel" aria-labelledby="faq-heading">
+        <div className="panel-header">
+          <h2 id="faq-heading">FAQ</h2>
+        </div>
+        <div className="panel-body faq-body">
+          <details open>
+            <summary>Is my DWG uploaded to a server?</summary>
+            <p>
+              No. CadChat parses the file locally in your browser with WebAssembly. The drawing
+              does not leave your machine through this app.
+            </p>
+          </details>
+          <details>
+            <summary>Can I convert DWG to CSV?</summary>
+            <p>
+              Yes. After opening a drawing, use Ask AI to download scoped CSV or copy a Markdown
+              pack that includes detected tables (stations, elevations, drawing index, and more).
+            </p>
+          </details>
+          <details>
+            <summary>Does this work with ChatGPT or Claude?</summary>
+            <p>
+              Yes. Click Copy for chat, paste into ChatGPT, Claude, or Cursor, and ask takeoff or
+              review questions about the drawing.
+            </p>
+          </details>
+          <details>
+            <summary>DWG vs DXF?</summary>
+            <p>
+              Both are supported. DWG includes an interactive SVG playground. DXF currently focuses
+              on data extract (tables/text) without full visual preview.
+            </p>
+          </details>
+          <details>
+            <summary>Is CadChat free?</summary>
+            <p>Yes. The tool is free to use in the browser.</p>
+          </details>
+        </div>
+      </section>
+
+      <footer className="site-footer">
+        <p>
+          CadChat on{' '}
+          <a href="https://drawask.github.io/">drawask.github.io</a>
+          {' · '}
+          <a href="https://github.com/drawask/drawask.github.io">Source</a>
+          {' · '}
+          Free online DWG / DXF viewer
+        </p>
+      </footer>
     </div>
   )
 }

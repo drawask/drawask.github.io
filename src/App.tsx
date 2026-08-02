@@ -76,10 +76,18 @@ export default function App() {
           ChatGPT, Claude, or Cursor. Parsing stays on your device.
         </p>
         <ul className="seo-pills" aria-label="Popular uses">
-          <li>DWG to CSV</li>
-          <li>Open DWG online</li>
-          <li>DWG to ChatGPT</li>
-          <li>Extract table from DWG</li>
+          <li>
+            <a href="/dwg-to-csv.html">DWG to CSV</a>
+          </li>
+          <li>
+            <a href="/open-dwg-online.html">Open DWG online</a>
+          </li>
+          <li>
+            <a href="/dwg-to-chatgpt.html">DWG to ChatGPT</a>
+          </li>
+          <li>
+            <a href="/extract-table-from-dwg.html">Extract table from DWG</a>
+          </li>
         </ul>
       </header>
 
@@ -268,6 +276,32 @@ export default function App() {
           ) : null}
         </>
       ) : null}
+
+      <section className="panel guides-panel" aria-labelledby="guides-heading">
+        <div className="panel-header">
+          <h2 id="guides-heading">Guides</h2>
+        </div>
+        <div className="panel-body">
+          <div className="guide-grid">
+            <a className="guide-card" href="/dwg-to-csv.html">
+              <strong>DWG to CSV</strong>
+              <span>Extract CAD tables and download CSV online.</span>
+            </a>
+            <a className="guide-card" href="/dwg-to-chatgpt.html">
+              <strong>DWG to ChatGPT</strong>
+              <span>Copy a clean pack and chat about the drawing.</span>
+            </a>
+            <a className="guide-card" href="/open-dwg-online.html">
+              <strong>Open DWG online</strong>
+              <span>Free browser DWG/DXF viewer, no install.</span>
+            </a>
+            <a className="guide-card" href="/extract-table-from-dwg.html">
+              <strong>Extract table from DWG</strong>
+              <span>Pull elevation and index tables from sheets.</span>
+            </a>
+          </div>
+        </div>
+      </section>
 
       <section className="faq panel" aria-labelledby="faq-heading">
         <div className="panel-header">

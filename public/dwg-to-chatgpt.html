@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DWG to ChatGPT | Copy CAD Drawing Context for AI – CadChat</title>
+    <meta
+      name="description"
+      content="Use DWG with ChatGPT: open the drawing online, copy a structured CadChat pack, and paste into ChatGPT or Claude for takeoffs and design questions."
+    />
+    <link rel="canonical" href="https://drawask.github.io/dwg-to-chatgpt.html" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:title" content="DWG to ChatGPT | CadChat" />
+    <meta
+      property="og:description"
+      content="Turn a DWG into an AI-ready chat pack. Paste into ChatGPT for quantities, tables, and review."
+    />
+    <meta property="og:url" content="https://drawask.github.io/dwg-to-chatgpt.html" />
+    <meta property="og:image" content="https://drawask.github.io/og.jpg" />
+    <link rel="stylesheet" href="/guide.css" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "Use a DWG file with ChatGPT",
+        "description": "Prepare AutoCAD DWG context for ChatGPT using CadChat.",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Open the DWG in CadChat",
+            "text": "Upload the .dwg file at https://drawask.github.io/"
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Scope what matters",
+            "text": "Hide noise layers or select a region in the playground."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Copy for chat",
+            "text": "Open Ask AI, optionally type your question, then Copy for chat."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Paste into ChatGPT",
+            "text": "Paste the pack into ChatGPT, Claude, or Cursor and continue the conversation."
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <main class="wrap">
+      <a class="brand" href="/">CadChat</a>
+      <h1>DWG to ChatGPT (copy drawing context for AI)</h1>
+      <p class="lead">
+        ChatGPT cannot read a raw DWG well by itself. CadChat turns the drawing into a clean
+        text pack (tables, layers, scoped entities) you can paste into ChatGPT, Claude, or Cursor.
+      </p>
+      <p><a class="cta" href="/">Open DWG and copy for ChatGPT</a></p>
+
+      <section class="card">
+        <h2>Best prompts after you paste</h2>
+        <ul>
+          <li>“Summarize pipe sizes and stations from the tables.”</li>
+          <li>“List ground elevation vs invert at each station.”</li>
+          <li>“Estimate excavation depth ranges from the datasheet.”</li>
+          <li>“What is missing for a quantity takeoff?”</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Why this works better than uploading DWG to chat</h2>
+        <ul>
+          <li>Structured tables beat opaque binary CAD files</li>
+          <li>You control scope (layers/region) before the AI sees it</li>
+          <li>File stays local until you paste the text pack yourself</li>
+        </ul>
+      </section>
+
+      <nav class="nav" aria-label="Related guides">
+        <a href="/dwg-to-csv.html">DWG to CSV</a>
+        <a href="/open-dwg-online.html">Open DWG online</a>
+        <a href="/extract-table-from-dwg.html">Extract table from DWG</a>
+      </nav>
+      <p class="footer">CadChat · DWG to ChatGPT · <a href="/">Home</a></p>
+    </main>
+  </body>
+</html>

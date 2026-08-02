@@ -70,6 +70,46 @@
         ]
       }
     </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is my DWG uploaded to a server?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. CadChat parses the file locally in your browser with WebAssembly. The drawing does not leave your machine through this app."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I convert DWG to CSV?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. After opening a drawing, use Ask AI to download scoped CSV or copy a Markdown pack that includes detected tables."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does this work with ChatGPT or Claude?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Click Copy for chat, paste into ChatGPT, Claude, or Cursor, and ask takeoff or review questions about the drawing."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is CadChat free?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. The tool is free to use in the browser."
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Extract Table from DWG Online | Elevation &amp; Index Tables – CadChat</title>
+    <meta
+      name="description"
+      content="Extract tables from DWG online. CadChat detects labeled CAD tables (stations, elevations, drawing index) and exports them for CSV or AI chat."
+    />
+    <link rel="canonical" href="https://drawask.github.io/extract-table-from-dwg.html" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:title" content="Extract Table from DWG | CadChat" />
+    <meta
+      property="og:description"
+      content="Pull station/elevation and drawing-index tables out of DWG files in the browser."
+    />
+    <meta property="og:url" content="https://drawask.github.io/extract-table-from-dwg.html" />
+    <meta property="og:image" content="https://drawask.github.io/og.jpg" />
+    <link rel="stylesheet" href="/guide.css" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <main class="wrap">
+      <a class="brand" href="/">CadChat</a>
+      <h1>Extract table from DWG online</h1>
+      <p class="lead">
+        Civil and shop drawings often store the useful numbers as text grids, not Excel. CadChat
+        clusters labeled text into tables so you can export CSV or paste them into ChatGPT.
+      </p>
+      <p><a class="cta" href="/">Extract tables from your DWG</a></p>
+
+      <section class="card">
+        <h2>Examples CadChat looks for</h2>
+        <ul>
+          <li>Profile datasheets: GROUND ELEVATION, TOP PIPE, DEPTH TO EXC + STATION headers</li>
+          <li>Drawing index: PART 1, FROM ST 0+000 TO 1+000, DRAWING NO.</li>
+          <li>Other labeled numeric schedules on content layers</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>Tips for better table detection</h2>
+        <ol>
+          <li>Keep label layers visible (for example C-LABELS)</li>
+          <li>Hide pure drafting noise if needed</li>
+          <li>Use region select around one datasheet when the sheet is crowded</li>
+        </ol>
+      </section>
+
+      <nav class="nav" aria-label="Related guides">
+        <a href="/dwg-to-csv.html">DWG to CSV</a>
+        <a href="/dwg-to-chatgpt.html">DWG to ChatGPT</a>
+        <a href="/open-dwg-online.html">Open DWG online</a>
+      </nav>
+      <p class="footer">CadChat · extract DWG tables · <a href="/">Home</a></p>
+    </main>
+  </body>
+</html>

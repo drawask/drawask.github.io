@@ -2,7 +2,9 @@
 
 Open a DWG/DXF in the browser, explore the drawing, then copy a clean pack and chat about it with any AI.
 
-**Live:** connect this repo to [Vercel](https://vercel.com) for a free `*.vercel.app` URL.
+**Site (GitHub Pages):** https://hussain-mushtaque.github.io/cadchat/
+
+Personal project. No company hosting.
 
 ## Features
 
@@ -21,14 +23,18 @@ npm run dev
 
 Open the URL Vite prints (default `http://localhost:5173`).
 
-## Deploy
+## Publish (GitHub Pages)
 
-1. Push to GitHub (this repo)
-2. Import the repo in [Vercel](https://vercel.com/new)
-3. Framework: Vite · Build: `npm run build` · Output: `dist`
+Hosting is on **your personal GitHub account**, not Vercel / company infra.
+
+1. Repo Settings → **Pages**
+2. Source: **GitHub Actions**
+3. Push to `main` (workflow `.github/workflows/deploy-pages.yml` builds and deploys)
+
+Live URL: `https://hussain-mushtaque.github.io/cadchat/`
 
 ## Notes
 
-- Files stay in the browser (nothing uploaded to a server by the app itself).
+- Files stay in the browser (the app does not upload drawings to a server).
 - DWG has SVG playground preview. DXF currently exports data without SVG preview.
 - `@mlightcad/libredwg-web` is GPL-3.0, so this project is GPL-3.0 as well.

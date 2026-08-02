@@ -1,5 +1,6 @@
 import { DOMParser } from '@xmldom/xmldom'
 import { unzipSync, strFromU8 } from 'fflate'
+import { normalizeDiameter, pipeColorRgb, pipeLayerName } from './pipe-legend.ts'
 import type { EntityRow } from './types'
 
 type ParsedKml = {
@@ -116,9 +117,27 @@ function geometryFromPlacemark(pm: Element): {
   return { type: 'UNKNOWN', points: [] }
 }
 
-function buildSvg(
-  rows: EntityRow[],
-): string {
+/** Pull key/value rows out of Google Earth HTML description tables. */
+export function extractDescriptionFields(description: string): Record<string, string> {
+  const fields: Record<string, string> = {}
+  const re = /<td[^>]*>\s*([^<]+?)\s*<\/td>\s*<td[^>]*>\s*([^<]*?)\s*<\/td>/gi
+  let m: RegExpExecArray | null
+  while ((m = re.exec(description))) {
+    const key = m[1].replace(/\s+/g, ' ').trim()
+    const value = m[2]
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&')
+      .replace(/\s+/g, ' ')
+      .trim()
+    if (key && value && key.toLowerCase() !== value.toLowerCase()) {
+      fields[key] = value
+    }
+  }
+  return fields
+}
+
+function buildSvg(rows: EntityRow[]): string {
   const pts = rows.filter((r) => r.x != null && r.y != null) as Array<
     EntityRow & { x: number; y: number }
   >
@@ -141,6 +160,7 @@ function buildSvg(
   const vbY = -(maxY + h * pad)
   const vbW = w * (1 + pad * 2)
   const vbH = h * (1 + pad * 2)
+  const strokeBase = Math.max(w, h) * 0.0025
 
   const parts: string[] = [
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vbX} ${vbY} ${vbW} ${vbH}" data-origin-x="${vbX}" data-origin-y="${vbY}" data-world-width="${vbW}" data-world-height="${vbH}" width="100%" height="100%" style="background:#0b1220;display:block">`,
@@ -157,12 +177,15 @@ function buildSvg(
   let i = 0
   for (const [layer, layerRows] of byLayer) {
     const safe = layer.replace(/&/g, '&amp;').replace(/"/g, '&quot;')
-    parts.push(`<g data-layer="${safe}" id="kml-${i++}" stroke="rgb(226,232,240)" fill="none">`)
+    const layerColor = layerRows[0]?.color || 'rgb(226,232,240)'
+    parts.push(
+      `<g data-layer="${safe}" id="kml-${i++}" stroke="${layerColor}" fill="none">`,
+    )
     for (const row of layerRows) {
+      const color = row.color || layerColor
       if (row.type === 'POINT' && row.x != null && row.y != null) {
-        // Labels stay in entity rows / HTML overlays; SVG text would flip with Y.
         parts.push(
-          `<circle cx="${row.x}" cy="${row.y}" r="${Math.max(w, h) * 0.008}" fill="rgb(45,212,191)" stroke="none" />`,
+          `<circle cx="${row.x}" cy="${row.y}" r="${Math.max(w, h) * 0.008}" fill="${color}" stroke="none" />`,
         )
       } else if (
         (row.type === 'LINESTRING' || row.type === 'POLYGON') &&
@@ -173,8 +196,11 @@ function buildSvg(
           const coords = JSON.parse(raw) as Array<{ x: number; y: number }>
           if (coords.length >= 2) {
             const d = coords.map((c, idx) => `${idx === 0 ? 'M' : 'L'}${c.x},${c.y}`).join(' ')
+            const diam = Number(row.attributes.match(/(?:^|;)\s*diameter=(\d+)/)?.[1])
+            const width =
+              strokeBase * (Number.isFinite(diam) ? Math.min(2.8, Math.max(1, diam / 250)) : 1.2)
             parts.push(
-              `<path d="${d}${row.type === 'POLYGON' ? ' Z' : ''}" stroke="rgb(94,234,212)" stroke-width="${Math.max(w, h) * 0.003}" fill="${row.type === 'POLYGON' ? 'rgba(45,212,191,0.15)' : 'none'}" />`,
+              `<path d="${d}${row.type === 'POLYGON' ? ' Z' : ''}" stroke="${color}" stroke-width="${width}" fill="${row.type === 'POLYGON' ? color.replace('rgb', 'rgba').replace(')', ',0.15)') : 'none'}" />`,
             )
           }
         } catch {
@@ -220,28 +246,48 @@ export function parseKmlText(kmlText: string): ParsedKml {
   for (const { folder, placemark } of placemarks) {
     const name = textOf(firstChild(placemark, 'name'))
     const description = textOf(firstChild(placemark, 'description'))
+    const fields = extractDescriptionFields(description)
+    const diameter = normalizeDiameter(fields.DIAMETER ?? fields.Diameter ?? fields.diameter)
+    const zone = fields.ZONE ?? fields.Zone ?? ''
     const geom = geometryFromPlacemark(placemark)
     if (geom.points.length === 0 && !name && !description) continue
 
     const first = geom.points[0]
     const last = geom.points[geom.points.length - 1]
-    const text = [name, description].filter(Boolean).join(' · ')
+    const layer = pipeLayerName(diameter)
+    const color = pipeColorRgb(diameter)
+    const label = pipeLayerName(diameter)
+    const text = [label, zone || null, name || null].filter(Boolean).join(' · ')
+    const attrParts = [
+      diameter ? `diameter=${diameter}` : '',
+      zone ? `zone=${zone}` : '',
+      name ? `name=${name}` : '',
+      folder ? `folder=${folder}` : '',
+    ].filter(Boolean)
+
     rows.push({
       handle: `kml-${handle++}`,
       type: geom.type,
-      layer: folder,
-      colorIndex: '',
-      color: '',
+      layer,
+      colorIndex: diameter ?? '',
+      color,
       lineType: 'Continuous',
       visible: 'true',
       text,
       blockName: '',
-      attributes: description && name ? `name=${name}` : '',
+      attributes: attrParts.join(';'),
       geometry:
         geom.points.length > 0
           ? `coords=${JSON.stringify(geom.points.map((p) => ({ x: p.x, y: p.y, z: p.z })))}`
           : '',
-      details: JSON.stringify({ name, description, pointCount: geom.points.length }),
+      details: JSON.stringify({
+        name,
+        diameter,
+        zone,
+        folder,
+        fields,
+        pointCount: geom.points.length,
+      }),
       x: first?.x ?? null,
       y: first?.y ?? null,
       x2: last && geom.points.length > 1 ? last.x : null,
@@ -249,10 +295,14 @@ export function parseKmlText(kmlText: string): ParsedKml {
     })
   }
 
-  const layerNames = [...new Set(rows.map((r) => r.layer))]
+  const layerNames = [...new Set(rows.map((r) => r.layer))].sort((a, b) => {
+    const da = Number(a.match(/Ø(\d+)/)?.[1] ?? Infinity)
+    const db = Number(b.match(/Ø(\d+)/)?.[1] ?? Infinity)
+    return da - db || a.localeCompare(b)
+  })
   const layers = layerNames.map((name) => ({
     name,
-    colorIndex: 3,
+    colorIndex: Number(name.match(/Ø(\d+)/)?.[1] ?? 7),
     frozen: false,
     off: false,
     locked: false,
@@ -265,7 +315,13 @@ export function parseKmlText(kmlText: string): ParsedKml {
     header: {
       format: 'KML',
       placemarkCount: rows.length,
-      note: 'Coordinates are longitude (x) / latitude (y) in WGS84 degrees.',
+      note: 'Coordinates are longitude (x) / latitude (y) in WGS84 degrees. Lines are grouped and colored by DIAMETER (pipe legend).',
+      pipeLegend: {
+        'PO-Ø250 HDPE': 'green',
+        'PO-Ø400 HDPE': 'yellow',
+        'PO-Ø500 HDPE': 'blue',
+        'PO-Ø600 HDPE': 'red',
+      },
     },
     raw: { placemarkCount: rows.length, layers: layerNames },
     svg: buildSvg(rows),

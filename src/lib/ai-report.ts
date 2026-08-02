@@ -99,6 +99,17 @@ export function buildAiReport(
   for (const line of geometrySummary) parts.push(`- ${line}`)
   parts.push('')
 
+  const hasPipeLayers = layers.some((l) => /PO-Ø\d+/i.test(l.name))
+  if (hasPipeLayers || result.format === 'kmz' || result.format === 'kml') {
+    parts.push(`## Pipe diameter color legend`)
+    parts.push(`- PO-Ø250 HDPE → green`)
+    parts.push(`- PO-Ø400 HDPE → yellow`)
+    parts.push(`- PO-Ø500 HDPE → blue`)
+    parts.push(`- PO-Ø600 HDPE → red`)
+    parts.push(`- Other diameters use distinct colors; layer names are \`PO-Ø{mm} HDPE\`.`)
+    parts.push('')
+  }
+
   parts.push(`## Layers likely to contain answers`)
   if (contentLayers.length === 0) parts.push(`- (none auto-flagged; inspect full layer list)`)
   for (const layer of contentLayers.slice(0, 40)) {

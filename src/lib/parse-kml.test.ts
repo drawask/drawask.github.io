@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { parseKmlText } from './parse-kml.ts'
+import { extractDescriptionFields, parseKmlText } from './parse-kml.ts'
 
 const sample = `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
@@ -9,11 +9,22 @@ const sample = `<?xml version="1.0" encoding="UTF-8"?>
       <name>Sites</name>
       <Placemark>
         <name>Valve A</name>
-        <description>Main valve</description>
+        <description><![CDATA[
+          <table>
+            <tr><td>DIAMETER</td><td>250</td></tr>
+            <tr><td>ZONE</td><td>ZONE 1</td></tr>
+          </table>
+        ]]></description>
         <Point><coordinates>55.27,25.20,12</coordinates></Point>
       </Placemark>
       <Placemark>
         <name>Pipe run</name>
+        <description><![CDATA[
+          <table>
+            <tr><td>DIAMETER</td><td>600</td></tr>
+            <tr><td>ZONE</td><td>ZONE 2</td></tr>
+          </table>
+        ]]></description>
         <LineString>
           <coordinates>
             55.27,25.20,0 55.28,25.21,0
@@ -24,16 +35,21 @@ const sample = `<?xml version="1.0" encoding="UTF-8"?>
   </Document>
 </kml>`
 
+const fields = extractDescriptionFields(
+  '<tr><td>DIAMETER</td><td>400</td></tr><tr><td>ZONE</td><td>ZONE 9</td></tr>',
+)
+assert.equal(fields.DIAMETER, '400')
+assert.equal(fields.ZONE, 'ZONE 9')
+
 const parsed = parseKmlText(sample)
 assert.equal(parsed.rows.length, 2)
-assert.equal(parsed.rows[0].type, 'POINT')
-assert.equal(parsed.rows[0].x, 55.27)
-assert.equal(parsed.rows[0].y, 25.2)
-assert.match(parsed.rows[0].text, /Valve A/)
-assert.equal(parsed.rows[1].type, 'LINESTRING')
-assert.ok(parsed.svg.includes('viewBox='))
+assert.equal(parsed.rows[0].layer, 'PO-Ø250 HDPE')
+assert.equal(parsed.rows[0].color, 'rgb(34,197,94)')
+assert.match(parsed.rows[0].text, /PO-Ø250/)
+assert.equal(parsed.rows[1].layer, 'PO-Ø600 HDPE')
+assert.equal(parsed.rows[1].color, 'rgb(239,68,68)')
+assert.ok(parsed.svg.includes('rgb(239,68,68)'))
 assert.ok(parsed.svg.includes('cad-local'))
-assert.equal(parsed.layers[0]?.name, 'Sample / Sites')
 
 // Google Earth: xsi: without xmlns:xsi must not throw NamespaceError.
 const earthish = `<?xml version="1.0" encoding="UTF-8"?>

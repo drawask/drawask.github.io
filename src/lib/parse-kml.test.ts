@@ -35,4 +35,13 @@ assert.ok(parsed.svg.includes('viewBox='))
 assert.ok(parsed.svg.includes('cad-local'))
 assert.equal(parsed.layers[0]?.name, 'Sample / Sites')
 
+// Google Earth: xsi: without xmlns:xsi must not throw NamespaceError.
+const earthish = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document xsi:schemaLocation="http://www.opengis.net/kml/2.2 http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd">
+    <Placemark><name>P</name><Point><coordinates>1,2,0</coordinates></Point></Placemark>
+  </Document>
+</kml>`
+assert.equal(parseKmlText(earthish).rows.length, 1)
+
 console.log('parse-kml.test.ts: ok')

@@ -189,8 +189,20 @@ function buildSvg(
   return parts.join('')
 }
 
+/** Google Earth often emits xsi:schemaLocation without xmlns:xsi. */
+function normalizeKmlXml(kmlText: string): string {
+  let text = kmlText
+  if (/\bxsi:/.test(text) && !/\bxmlns:xsi=/.test(text)) {
+    text = text.replace(
+      /<kml\b/i,
+      '<kml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"',
+    )
+  }
+  return text
+}
+
 export function parseKmlText(kmlText: string): ParsedKml {
-  const doc = new DOMParser().parseFromString(kmlText, 'text/xml')
+  const doc = new DOMParser().parseFromString(normalizeKmlXml(kmlText), 'text/xml')
   const rootNode =
     Array.from(doc.childNodes).find((n) => n.nodeType === 1 && localName(n as unknown as Element) === 'kml') ??
     doc.documentElement

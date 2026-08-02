@@ -33,8 +33,13 @@ export default function App() {
   async function handleFile(file: File | undefined) {
     if (!file) return
     const lower = file.name.toLowerCase()
-    if (!lower.endsWith('.dwg') && !lower.endsWith('.dxf')) {
-      setError('Please upload a .dwg or .dxf file.')
+    if (
+      !lower.endsWith('.dwg') &&
+      !lower.endsWith('.dxf') &&
+      !lower.endsWith('.kmz') &&
+      !lower.endsWith('.kml')
+    ) {
+      setError('Please upload a .dwg, .dxf, .kmz, or .kml file.')
       return
     }
 
@@ -114,7 +119,7 @@ export default function App() {
         <input
           ref={fileInputRef}
           type="file"
-          accept=".dwg,.dxf,application/acad,application/x-dwg,image/vnd.dwg"
+          accept=".dwg,.dxf,.kmz,.kml,application/acad,application/x-dwg,image/vnd.dwg,application/vnd.google-earth.kmz,application/vnd.google-earth.kml+xml"
           disabled={busy}
           className="file-input"
           onChange={(e) => {
@@ -130,8 +135,11 @@ export default function App() {
         >
           {busy ? 'Parsing…' : 'Browse files'}
         </button>
-        <h2>{busy ? 'Parsing drawing…' : 'Drop a .dwg or .dxf file here'}</h2>
-        <p>Free DWG viewer online. One file powers View and Ask AI. Nothing is uploaded to a server.</p>
+        <h2>{busy ? 'Parsing drawing…' : 'Drop a .dwg, .dxf, .kmz, or .kml file here'}</h2>
+        <p>
+          Free DWG / KMZ viewer online. One file powers View and Ask AI. Nothing is uploaded to a
+          server.
+        </p>
       </div>
 
       {error ? <p className="status error">{error}</p> : null}

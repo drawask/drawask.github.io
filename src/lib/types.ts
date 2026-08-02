@@ -86,7 +86,7 @@ export type ExportScope = {
 export type ParseResult = {
   fileName: string
   fileSizeBytes: number
-  format: 'dwg' | 'dxf'
+  format: 'dwg' | 'dxf' | 'kmz' | 'kml'
   entityCount: number
   layerCount: number
   entityTypeCounts: Record<string, number>

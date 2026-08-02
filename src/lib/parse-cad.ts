@@ -2,6 +2,7 @@ import { Dwg_File_Type, LibreDwg } from '@mlightcad/libredwg-web'
 import { buildAiReport } from './ai-report'
 import { collectTexts, countTypes, flattenEntities } from './flatten-entities'
 import { parseDxfFile } from './parse-dxf'
+import { parseKmzOrKmlFile } from './parse-kml'
 import { prepareSvgForPreview } from './prepare-svg'
 import {
   clusterTextTables,
@@ -48,7 +49,7 @@ function unitsHintFromHeader(header: unknown): string {
 
 function finalize(input: {
   file: File
-  format: 'dwg' | 'dxf'
+  format: ParseResult['format']
   rows: ParseResult['rows']
   baseLayers: Array<{
     name: string
@@ -61,6 +62,7 @@ function finalize(input: {
   svg: string
   header: unknown
   rawJsonPayload: unknown
+  unitsHint?: string
 }): ParseResult {
   const entityTypeCounts = countTypes(input.rows)
   const textItems = collectTextItems(input.rows)
@@ -68,7 +70,7 @@ function finalize(input: {
   const tables = clusterTextTables(textItems)
   const extents = computeExtents(input.rows)
   const layers = enrichLayers(input.baseLayers, input.rows)
-  const unitsHint = unitsHintFromHeader(input.header)
+  const unitsHint = input.unitsHint ?? unitsHintFromHeader(input.header)
   const geometrySummary = summarizeGeometry(input.rows)
 
   const partial = {
@@ -186,5 +188,19 @@ export async function parseCadFile(file: File): Promise<ParseResult> {
       rawJsonPayload: parsed.raw,
     })
   }
-  throw new Error('Please upload a .dwg or .dxf file.')
+  if (lower.endsWith('.kmz') || lower.endsWith('.kml')) {
+    const parsed = await parseKmzOrKmlFile(file)
+    return finalize({
+      file,
+      format: lower.endsWith('.kmz') ? 'kmz' : 'kml',
+      rows: parsed.rows,
+      baseLayers: parsed.layers,
+      // KMZ/KML SVG is already local + Y-flipped for the playground.
+      svg: parsed.svg,
+      header: parsed.header,
+      rawJsonPayload: parsed.raw,
+      unitsHint: 'WGS84 degrees (longitude/latitude)',
+    })
+  }
+  throw new Error('Please upload a .dwg, .dxf, .kmz, or .kml file.')
 }

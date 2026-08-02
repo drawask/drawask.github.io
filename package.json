@@ -9,11 +9,13 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "node --experimental-strip-types src/lib/to-csv.test.ts && node --experimental-strip-types src/lib/smart-extract.test.ts && node --experimental-strip-types src/lib/flatten-entities.test.ts && node --experimental-strip-types src/lib/table-detect.test.ts"
+    "test": "node --experimental-strip-types src/lib/to-csv.test.ts && node --experimental-strip-types src/lib/smart-extract.test.ts && node --experimental-strip-types src/lib/flatten-entities.test.ts && node --experimental-strip-types src/lib/table-detect.test.ts && node --experimental-strip-types src/lib/parse-kml.test.ts"
   },
   "dependencies": {
     "@mlightcad/libredwg-web": "^0.7.9",
+    "@xmldom/xmldom": "^0.9.10",
     "dxf-parser": "^1.1.2",
+    "fflate": "^0.8.3",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

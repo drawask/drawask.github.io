@@ -1,0 +1,351 @@
+.playground {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: #070d16;
+  color: #e8eef5;
+  font-family: 'Outfit', system-ui, sans-serif;
+}
+
+.playground-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.playground-top h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.playground-top .meta {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.playground-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.playground-btn {
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: #1e293b;
+  color: #e8eef5;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.playground-btn:hover {
+  background: #334155;
+}
+
+.playground-btn.primary {
+  background: linear-gradient(135deg, #0f766e, #0ea5a4);
+  border-color: transparent;
+}
+
+.playground-btn.danger {
+  background: transparent;
+  border-color: rgba(248, 113, 113, 0.5);
+  color: #fecaca;
+}
+
+.playground-body {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 0;
+}
+
+.playground-sidebar {
+  border-right: 1px solid rgba(148, 163, 184, 0.25);
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.playground-sidebar-header {
+  padding: 12px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  display: grid;
+  gap: 8px;
+}
+
+.playground-sidebar-header h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.playground-sidebar-header input {
+  width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: #111827;
+  color: #e8eef5;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.layer-tools {
+  display: flex;
+  gap: 6px;
+}
+
+.layer-tools button {
+  flex: 1;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: #1e293b;
+  color: #cbd5e1;
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.layer-list {
+  overflow: auto;
+  padding: 8px;
+  display: grid;
+  gap: 4px;
+  min-height: 0;
+}
+
+.layer-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 8px;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 0.82rem;
+}
+
+.layer-row:hover {
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.layer-row.off {
+  opacity: 0.45;
+}
+
+.layer-row.selected {
+  background: rgba(14, 165, 164, 0.18);
+}
+
+.layer-row.likely .name {
+  color: #5eead4;
+}
+
+.layer-name-btn {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.layer-row .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.layer-row .badge {
+  font-size: 0.65rem;
+  color: #99f6e4;
+  border: 1px solid rgba(45, 212, 191, 0.45);
+  border-radius: 999px;
+  padding: 1px 6px;
+}
+
+.layer-row .count {
+  color: #94a3b8;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+}
+
+.layer-preview {
+  border-top: 1px solid rgba(148, 163, 184, 0.2);
+  padding: 10px 12px;
+  max-height: 180px;
+  overflow: auto;
+}
+
+.layer-preview h4 {
+  margin: 0 0 4px;
+  font-size: 0.9rem;
+}
+
+.layer-preview p {
+  margin: 0 0 8px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.layer-preview .muted {
+  color: #64748b;
+}
+
+.layer-preview ul {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+}
+
+.playground-viewport.selecting {
+  cursor: crosshair;
+}
+
+.region-draft,
+.region-active {
+  position: absolute;
+  border: 1.5px solid #fbbf24;
+  background: rgba(251, 191, 36, 0.15);
+  pointer-events: none;
+}
+
+.region-active {
+  border-style: dashed;
+  background: rgba(14, 165, 164, 0.12);
+  border-color: #2dd4bf;
+}
+
+.label-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cad-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  color: #f8fafc;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-shadow:
+    0 0 3px #0b1220,
+    0 0 6px #0b1220,
+    1px 1px 0 #0b1220,
+    -1px -1px 0 #0b1220;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.playground-stage text {
+  font-family: Arial, Helvetica, sans-serif !important;
+  stroke: none !important;
+  stroke-width: 0 !important;
+  paint-order: fill;
+}
+
+/* When HTML labels are active, hide broken SVG glyph strokes underneath. */
+.playground-stage.hide-svg-text text {
+  fill: transparent !important;
+  stroke: none !important;
+}
+
+.playground-viewport {
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(14, 165, 164, 0.08), transparent 40%),
+    #070d16;
+  touch-action: none;
+  min-height: 0;
+}
+
+.playground-viewport.dragging {
+  cursor: grabbing;
+}
+
+.playground-stage {
+  position: absolute;
+  inset: 0;
+}
+
+.playground-stage svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #0b1220;
+}
+
+.playground-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #94a3b8;
+  padding: 24px;
+  text-align: center;
+}
+
+.playground-hint {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  pointer-events: none;
+}
+
+.playground-zoom {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: grid;
+  gap: 6px;
+}
+
+.playground-zoom button {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(15, 23, 42, 0.9);
+  color: #e8eef5;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .playground-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: 220px 1fr;
+  }
+
+  .playground-sidebar {
+    border-right: 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+  }
+}

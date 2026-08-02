@@ -1,10 +1,10 @@
-# CadChat
+# CadChat (DrawAsk)
 
 Open a DWG/DXF in the browser, explore the drawing, then copy a clean pack and chat about it with any AI.
 
-**Site (GitHub Pages):** https://hussain-mushtaque.github.io/cadchat/
+**Live:** https://drawask.github.io/
 
-Personal project. No company hosting.
+Repo: https://github.com/drawask/drawask.github.io
 
 ## Features
 
@@ -23,15 +23,11 @@ npm run dev
 
 Open the URL Vite prints (default `http://localhost:5173`).
 
-## Publish (GitHub Pages)
+## Publish
 
-Hosting is on **your personal GitHub account**, not Vercel / company infra.
+Hosted on GitHub Pages for the **drawask** organization (personal project, not company infra).
 
-1. Repo Settings → **Pages**
-2. Source: **GitHub Actions**
-3. Push to `main` (workflow `.github/workflows/deploy-pages.yml` builds and deploys)
-
-Live URL: `https://hussain-mushtaque.github.io/cadchat/`
+Push to `main` → workflow `.github/workflows/deploy-pages.yml` deploys to https://drawask.github.io/
 
 ## Notes
 

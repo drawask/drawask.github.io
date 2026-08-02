@@ -1,11 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// GitHub Pages project site needs /cadchat/; local dev stays at /.
-const base = process.env.GITHUB_PAGES === '1' ? '/cadchat/' : '/'
-
+// Org site: https://drawask.github.io/ (repo drawask.github.io → base /)
 export default defineConfig({
-  base,
+  base: '/',
   plugins: [react()],
   optimizeDeps: {
     exclude: ['@mlightcad/libredwg-web'],
